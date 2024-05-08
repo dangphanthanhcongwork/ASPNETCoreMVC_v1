@@ -1,0 +1,55 @@
+@model IEnumerable<WebApplication.Models.Person>
+
+@{
+    ViewData["Title"] = "Person";
+}
+
+<div class="container">
+    <h1>Persons</h1>
+    <p>
+        <a href="@Url.Action("Get", "Person")" class="btn btn-link">View All</a>
+        <a href="@Url.Action("GetMales", "Person")" class="btn btn-link">View All Males</a>
+        <a href="@Url.Action("GetOldest", "Person")" class="btn btn-link">View Oldest Person</a>
+        <a href="@Url.Action("GetByBirthYear", "Person", new { year = 2000 })" class="btn btn-link">View Persons Born in
+            2000</a>
+        <a href="@Url.Action("GetByBirthYearGreaterThan", "Person", new { year = 2000 })" class="btn btn-link">View
+            Persons Born After 2000</a>
+        <a href="@Url.Action("GetByBirthYearLessThan", "Person", new { year = 2000 })" class="btn btn-link">View Persons
+            Born Before 2000</a>
+        <a href="@Url.Action("DownloadExcel", "Person")" class="btn btn-link">Download Excel</a>
+    </p>
+    <table class="table">
+        <a href="@Url.Action("Create", "Person")" class="btn btn-success">Add Person</a>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Birth Place</th>
+                <th>Phone Number</th>
+                <th>Is Graduated?</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in Model)
+            {
+                <tr>
+                    <td>@person.Id</td>
+                    <td>@person.FullName</td>
+                    <td>@person.Gender</td>
+                    <td>@person.DateOfBirth.ToString("dd/mm/yyyy")</td>
+                    <td>@person.BirthPlace</td>
+                    <td>@person.PhoneNumber</td>
+                    <td>@(person.IsGraduated ? "Yes" : "No")</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Person", new { id = person.Id })" class="btn btn-primary">Edit</a>
+                        <a href="@Url.Action("Get", "Person", new { id = person.Id })" class="btn btn-info">Details</a>
+                        <a href="@Url.Action("Delete", "Person", new { id = person.Id })" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
