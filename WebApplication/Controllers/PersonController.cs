@@ -1,31 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
-using WebApplication.Repositories;
+using WebApplication.Services;
 using OfficeOpenXml;
 
 namespace WebApplication.Controllers
 {
     public class PersonController : Controller
     {
-        private readonly PersonRepository _personRepository;
+        private readonly PersonService _personService;
 
-        public PersonController(PersonRepository personRepository)
+        public PersonController(PersonService personService)
         {
-            _personRepository = personRepository;
+            _personService = personService;
         }
 
         // GET: Person
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return View("Index", await _personRepository.Get());
+            return View("Index", await _personService.Get());
         }
 
         // GET: Person/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var person = await _personRepository.Get(id);
+            var person = await _personService.Get(id);
             if (person == null)
             {
                 return NotFound();
@@ -45,7 +45,7 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Person person)
         {
-            await _personRepository.Add(person);
+            await _personService.Add(person);
             return RedirectToAction("Get", new { id = person.Id });
         }
 
@@ -53,7 +53,7 @@ namespace WebApplication.Controllers
         [HttpGet("{id}/edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var person = await _personRepository.Get(id);
+            var person = await _personService.Get(id);
             if (person == null)
             {
                 return NotFound();
@@ -70,7 +70,7 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-            await _personRepository.Update(person);
+            await _personService.Update(person);
             return RedirectToAction("Get", new { id = person.Id });
         }
 
@@ -78,7 +78,7 @@ namespace WebApplication.Controllers
         [HttpGet("{id}/delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var person = await _personRepository.Get(id);
+            var person = await _personService.Get(id);
             if (person == null)
             {
                 return NotFound();
@@ -91,42 +91,42 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmesPost(Guid id)
         {
-            var person = await _personRepository.Get(id);
+            var person = await _personService.Get(id);
             if (person == null)
             {
                 return NotFound();
             }
-            await _personRepository.Delete(id);
+            await _personService.Delete(id);
             return RedirectToAction("Get");
         }
 
         public async Task<IActionResult> GetMales()
         {
-            var males = await _personRepository.GetMales();
+            var males = await _personService.GetMales();
             return View("Index", males);
         }
 
         public async Task<IActionResult> GetOldest()
         {
-            var oldest = await _personRepository.GetOldest();
+            var oldest = await _personService.GetOldest();
             return View("Index", oldest);
         }
 
         public async Task<IActionResult> GetByBirthYear(int year)
         {
-            var Persons = await _personRepository.GetByBirthYear(year);
+            var Persons = await _personService.GetByBirthYear(year);
             return View("Index", Persons);
         }
 
         public async Task<IActionResult> GetByBirthYearGreaterThan(int year)
         {
-            var Persons = await _personRepository.GetByBirthYearGreaterThan(year);
+            var Persons = await _personService.GetByBirthYearGreaterThan(year);
             return View("Index", Persons);
         }
 
         public async Task<IActionResult> GetByBirthYearLessThan(int year)
         {
-            var Persons = await _personRepository.GetByBirthYearLessThan(year);
+            var Persons = await _personService.GetByBirthYearLessThan(year);
             return View("Index", Persons);
         }
 
@@ -138,7 +138,7 @@ namespace WebApplication.Controllers
             using (var package = new ExcelPackage(stream))
             {
                 var worksheet = package.Workbook.Worksheets.Add("Persons");
-                worksheet.Cells.LoadFromCollection(await _personRepository.Get(), PrintHeaders: true);
+                worksheet.Cells.LoadFromCollection(await _personService.Get(), PrintHeaders: true);
 
                 package.Save();
             }

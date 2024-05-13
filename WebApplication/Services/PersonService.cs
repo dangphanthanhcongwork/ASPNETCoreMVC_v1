@@ -1,8 +1,8 @@
 using WebApplication.Models;
 
-namespace WebApplication.Repositories
+namespace WebApplication.Services
 {
-    public class PersonRepository
+    public class PersonService
     {
         private readonly List<Person> _persons = [
             // Add your dummy data here
