@@ -1,10 +1,10 @@
-using WebApplication.Repositories;
+using WebApplication.Services;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<PersonRepository>();
+builder.Services.AddSingleton<PersonService>();
 
 var app = builder.Build();
 
