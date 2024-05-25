@@ -17,11 +17,11 @@ namespace WebApplication.Models
 
         [Required]
         [Display(Name = "First name", Order = 2)]
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last name", Order = 3)]
-        public string LastName { get; set; }
+        public required string LastName { get; set; }
 
         [Display(Order = 4)]
         public string FullName { get { return LastName + " " + FirstName; } }
@@ -42,7 +42,7 @@ namespace WebApplication.Models
 
         [Required]
         [Display(Name = "Phone number", Order = 9)]
-        public string PhoneNumber { get; set; }
+        public required string PhoneNumber { get; set; }
 
         [Required]
         [Display(Name = "Is graduated", Order = 10)]
