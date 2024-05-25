@@ -1,0 +1,51 @@
+@model IEnumerable<Person>
+
+<h1>Persons</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Phone number</th>
+            <th>Birthplace</th>
+            <th>Is graduated</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.Gender</td>
+                <td>@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Birthplace</td>
+                <td>@item.IsGraduated</td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a asp-action="Index" class="btn btn-info">Index</a> |
+    <a asp-action="GetMales" class="btn btn-info">Get males</a> |
+    <a asp-action="GetOldest" class="btn btn-info">Get oldest</a> |
+    <a asp-action="GetByBirthYear" class="btn btn-info" asp-route-year="2000">Get by birth year 2000</a> |
+    <a asp-action="GetByBirthYearGreaterThan" class="btn btn-info" asp-route-year="2000">Get by birth year greater than
+        2000</a> |
+    <a asp-action="GetByBirthYearLessThan" class="btn btn-info" asp-route-year="2000">Get by birth year less than
+        2000</a> |
+    <a asp-action="ExportToExcel" class="btn btn-info">Export to excel</a>
+</p>

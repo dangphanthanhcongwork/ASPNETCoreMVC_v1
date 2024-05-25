@@ -1,82 +1,86 @@
 using WebApplication.Models;
+using WebApplication.Repositories;
 
 namespace WebApplication.Services
 {
-    public class PersonService
+    public class PersonService : IPersonService
     {
-        private readonly List<Person> _persons = [
-            // Add your dummy data here
-            new Person { Id = Guid.NewGuid(), FirstName = "Công", LastName = "Đặng Phan Thành", Gender = Gender.Male, DateOfBirth = new DateTime(2000, 6, 15), PhoneNumber = "0375284637", BirthPlace = "Lâm Đồng", IsGraduated = true },
-            new Person { Id = Guid.NewGuid(), FirstName = "Linh", LastName = "Nguyễn Mỹ", Gender = Gender.Female, DateOfBirth = new DateTime(1995, 7, 4), PhoneNumber = "0375284636", BirthPlace = "Hà Nội", IsGraduated = true },
-            new Person { Id = Guid.NewGuid(), FirstName = "Phương", LastName = "Nguyễn Thị Mai", Gender = Gender.Female, DateOfBirth = new DateTime(2002, 4, 7), PhoneNumber = "0375284635", BirthPlace = "Hải Phòng", IsGraduated = false },
-            new Person { Id = Guid.NewGuid(), FirstName = "Thu", LastName = "Phan Thị Hà", Gender = Gender.Female, DateOfBirth = new DateTime(2003, 2, 27), PhoneNumber = "0375284634", BirthPlace = "Huế", IsGraduated = false },
-            new Person { Id = Guid.NewGuid(), FirstName = "Quang", LastName = "Trần Huy", Gender = Gender.Male, DateOfBirth = new DateTime(1994, 4, 20), PhoneNumber = "0375284633", BirthPlace = "Hà Nội", IsGraduated = false },
-        ];
+        private readonly IPersonRepository _repository;
 
-        // ADD
-        public async Task Add(Person person)
+        public PersonService(IPersonRepository repository)
         {
-            _persons.Add(person);
-            await Task.CompletedTask;
+            _repository = repository;
         }
 
-        // GET
-        public async Task<IEnumerable<Person>> Get()
+        public async Task<IEnumerable<Person>> GetPersons()
         {
-            return await Task.FromResult(_persons.AsEnumerable());
+            return await _repository.GetPersons();
         }
 
-        public async Task<Person> Get(Guid id)
+        public async Task<Person> GetPerson(Guid id)
         {
-            var person = _persons.FirstOrDefault(p => p.Id == id) ?? throw new Exception($"Person {id} not found!!!");
-            return await Task.FromResult(person);
-        }
-
-        // EDIT
-        public async Task Update(Person person)
-        {
-            var index = _persons.FindIndex(p => p.Id == person.Id);
-            if (index != -1)
+            try
             {
-                _persons[index] = person;
+                return await _repository.GetPerson(id);
             }
-            await Task.CompletedTask;
-        }
-
-        // DELETE
-        public async Task Delete(Guid id)
-        {
-            var person = _persons.FirstOrDefault(p => p.Id == id);
-            if (person != null)
+            catch (Exception)
             {
-                _persons.Remove(person);
+                throw;
             }
-            await Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<Person>> GetMales()
+        public async Task PutPerson(Guid id, Person person)
         {
-            return await Task.FromResult(_persons.Where(p => p.Gender == Gender.Male).ToList().AsEnumerable());
+            try
+            {
+                await _repository.PutPerson(id, person);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Person>> GetOldest()
+        public async Task PostPerson(Person person)
         {
-            return await Task.FromResult(new List<Person> { _persons.OrderBy(p => p.DateOfBirth).First() }.AsEnumerable());
+            await _repository.PostPerson(person);
         }
 
-        public async Task<IEnumerable<Person>> GetByBirthYear(int year)
+        public async Task DeletePerson(Guid id)
         {
-            return await Task.FromResult(_persons.Where(p => p.DateOfBirth.Year == year).ToList().AsEnumerable());
+            try
+            {
+                await _repository.DeletePerson(id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Person>> GetByBirthYearGreaterThan(int year)
+        public Task<IEnumerable<Person>> GetMales()
         {
-            return await Task.FromResult(_persons.Where(p => p.DateOfBirth.Year > year).ToList().AsEnumerable());
+            return _repository.GetMales();
         }
 
-        public async Task<IEnumerable<Person>> GetByBirthYearLessThan(int year)
+        public Task<IEnumerable<Person>> GetOldest()
         {
-            return await Task.FromResult(_persons.Where(p => p.DateOfBirth.Year < year).ToList().AsEnumerable());
+            return _repository.GetOldest();
+        }
+
+        public Task<IEnumerable<Person>> GetByBirthYear(int year)
+        {
+            return _repository.GetByBirthYear(year);
+        }
+
+        public Task<IEnumerable<Person>> GetByBirthYearGreaterThan(int year)
+        {
+            return _repository.GetByBirthYearGreaterThan(year);
+        }
+
+        public Task<IEnumerable<Person>> GetByBirthYearLessThan(int year)
+        {
+            return _repository.GetByBirthYearLessThan(year);
         }
     }
 }

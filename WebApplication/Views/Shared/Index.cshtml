@@ -1,0 +1,54 @@
+@model IEnumerable<Person>
+
+<h1>Persons</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Phone number</th>
+            <th>Birthplace</th>
+            <th>Is graduated</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>@item.Gender</td>
+            <td>@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
+            <td>@item.PhoneNumber</td>
+            <td>@item.Birthplace</td>
+            <td>@item.IsGraduated</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>
+    <a asp-action="Index">Index</a> |
+    <a asp-action="GetMales">Get males</a> |
+    <a asp-action="GetOldest">Get oldest</a> |
+    <a asp-action="GetFullNames">Get full names</a> |
+    <a asp-action="GetByBirthYear" asp-route-year="2000">Get by birth year 2000</a> |
+    <a asp-action="GetByBirthYearGreaterThan" asp-route-year="2000">Get by birth year greater than 2000</a> |
+    <a asp-action="GetByBirthYearLessThan" asp-route-year="2000">Get by birth year less than 2000</a> |
+    <a asp-action="ExportToExcel">Export to excel</a>
+</p>
+
+<a href="javascript:history.back()">Go Back</a>
